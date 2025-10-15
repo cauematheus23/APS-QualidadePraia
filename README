@@ -3,83 +3,130 @@
 [![Status](https://img.shields.io/badge/status-funcional-green)](https://shields.io/)
 [![Tecnologia](https://img.shields.io/badge/tecnologia-Docker-blue)](https://shields.io/)
 
-Solução de backend completa para monitorar a qualidade da água de praias, ideal para demonstrações e protótipos.
-
-A aplicação é totalmente conteinerizada com Docker, permitindo uma configuração e execução simplificada em qualquer ambiente. A arquitetura inclui uma API RESTful em Python/FastAPI, um banco de dados PostgreSQL e um simulador que gera dados de sensores automaticamente.
-
-## ✨ Funcionalidades
-
-* **API RESTful:** Endpoints para ingestão e consulta de dados.
-* **Simulador Autônomo:** Gera dados realistas de praias conhecidas (Copacabana, Gonzaga, etc.) e envia para a API.
-* **Processamento de Alertas:** Rotina automática que analisa os dados e gera alertas (Verde, Amarelo, Vermelho) com mensagens amigáveis.
-* **Documentação Interativa:** Interface Swagger UI (`/docs`) para explorar e testar a API.
+Solução de backend completa para monitorar a qualidade da água de praias, ideal para demonstrações e protótipos, com integração pronta para o MIT App Inventor.
 
 ---
 
-## 🔧 Pré-requisitos
+### 🎯 Objetivo
 
-Para executar o projeto, você precisa apenas de uma ferramenta instalada:
+Facilitar o monitoramento da qualidade da água de praias através de uma API RESTful, conectando dados de sensores a um aplicativo móvel de fácil acesso, e automatizando a geração de alertas para a comunidade.
 
-* **Docker Desktop:** Garanta que esteja instalado e em execução.
-    * [Download para Windows, Mac e Linux](https://www.docker.com/products/docker-desktop/)
+### 🏗️ Arquitetura
 
----
+A aplicação é totalmente conteinerizada com Docker, permitindo uma configuração e execução simplificada em qualquer ambiente.
 
-## 🚀 Como Rodar o Projeto
+* **API RESTful (`api`):** Backend em Python/FastAPI que serve como o cérebro do sistema. Processa requisições, gerencia o banco de dados e executa a lógica de alertas.
+* **Banco de Dados (`db`):** Contêiner PostgreSQL para armazenamento persistente de praias, leituras de sensores e histórico de alertas.
+* **Simulador (`simulator`):** Serviço em Python que gera dados realistas de praias conhecidas e os envia para a API, simulando sensores em campo.
+* **Consumo (`mobile`):** A API é projetada para ser consumida por qualquer cliente HTTP, com foco no **MIT App Inventor** para prototipagem rápida.
+
+### 🚀 Funcionalidades
+
+* ✅ **Ingestão de Dados:** Endpoint para receber leituras de sensores (ex: nível de enterococos).
+* ✅ **Simulador Autônomo:** Gera dados realistas de praias conhecidas (Copacabana, Gonzaga, etc.) e envia para a API.
+* ✅ **Processamento de Alertas:** Rotina automática que analisa os dados e gera alertas (Verde, Amarelo, Vermelho) com mensagens amigáveis para o usuário final.
+* ✅ **Consulta de Dados:** Endpoints para listar praias cadastradas e os alertas gerados.
+* ✅ **Documentação Interativa:** Interface Swagger UI (`/docs`) para explorar e testar a API.
+
+### 🛠️ Tecnologias
+
+* **Backend:** Python 3.11, FastAPI, Uvicorn
+* **Banco de Dados:** PostgreSQL 15
+* **ORM e Validação:** SQLAlchemy, Pydantic
+* **Tarefas em Background:** APScheduler
+* **Infraestrutura:** Docker, Docker Compose
+* **Cliente Mobile:** MIT App Inventor
+
+### 📁 Estrutura do Projeto
+
+projeto-praias/
+├── api/                   # Backend FastAPI
+│   ├── main.py            # Endpoints da API e lógica principal
+│   ├── models.py          # Modelos de dados do SQLAlchemy
+│   ├── schemas.py         # Esquemas de validação do Pydantic
+│   ├── alerts.py          # Lógica do serviço de alertas
+│   ├── database.py        # Configuração do banco de dados
+│   ├── Dockerfile         # Instruções para construir a imagem da API
+│   └── requirements.txt   # Dependências Python da API
+├── simulator/             # Simulador de Sensores
+│   ├── simulator.py       # Script que gera e envia dados
+│   ├── Dockerfile         # Instruções para construir a imagem do simulador
+│   └── requirements.txt   # Dependências do simulador
+├── docker-compose.yml     # Orquestra todos os serviços
+└── README.md              # Este arquivo
+
+
+### 🚀 Como Executar
 
 Siga estes 3 passos para colocar todo o sistema no ar.
 
-### 1. Obtenha o Código
+#### 1. Pré-requisitos
+Garanta que o **Docker Desktop** esteja instalado e em execução na sua máquina.
 
-Clone este repositório para a sua máquina local usando o seguinte comando em um terminal:
-
+#### 2. Clone o Repositório
+Abra um terminal e clone o projeto para sua máquina local.
 ```bash
 git clone <URL_DO_SEU_REPOSITORIO>
-2. Entre na Pasta do Projeto
-Navegue para o diretório que você acabou de clonar.
+3. Inicie os Serviços
+Navegue até a pasta do projeto e execute o Docker Compose.
 
 Bash
 
 cd <NOME_DA_PASTA_DO_PROJETO>
-3. Inicie os Serviços
-Use o Docker Compose para construir as imagens e iniciar todos os contêineres. Este é o único comando que você precisa para rodar tudo:
-
-Bash
-
 docker compose up --build
 Aguarde a inicialização. O terminal exibirá os logs dos serviços. A primeira vez pode demorar alguns minutos.
 
 ✅ Verificação e Teste
-Para confirmar que tudo está funcionando:
+Para confirmar que tudo está funcionando, acesse a documentação da API no seu navegador: http://localhost:8000/docs. Teste os endpoints GET /praias/ e GET /alertas/.
 
-Acesse a documentação da API no seu navegador: http://localhost:8000/docs
+📱 Funcionalidades Mobile (Integração com App Inventor)
+Para que seu aplicativo no celular se conecte à API:
 
-Teste os endpoints. Execute o GET /praias/ para ver as praias criadas e o GET /alertas/ para ver os alertas gerados pelo simulador.
+Encontre o IP do seu Computador: Seu PC e celular precisam estar na mesma rede Wi-Fi. O app não entende localhost.
 
-📱 Integração com App Inventor
-Para que seu aplicativo no celular se conecte à API que está rodando no seu computador, siga estes passos:
+No Windows: Abra o CMD, digite ipconfig e procure pelo "Endereço IPv4".
 
-1. Encontre o IP do seu Computador
-Seu computador e seu celular precisam estar na mesma rede Wi-Fi. O app não entende localhost.
+No macOS/Linux: Abra o terminal, digite ifconfig ou ip a.
 
-No Windows: Abra o Prompt de Comando (CMD), digite ipconfig e procure pelo "Endereço IPv4" da sua conexão (Wi-Fi ou Ethernet).
+Configure a URL nos Blocos: Nos blocos do App Inventor, onde você configura a URL dos componentes Web, use o IP encontrado.
 
-No macOS/Linux: Abra o terminal, digite ifconfig ou ip a e procure pelo seu endereço de IP (inet).
+Exemplo: http://192.168.0.15:8000/alertas/
 
-O IP será algo como 192.168.0.15 ou 192.168.1.10.
+Firewall: Se o app não conectar, o Firewall do seu PC pode estar bloqueando a porta. Crie uma "Regra de Entrada" no Firewall do Windows para permitir conexões TCP na porta 8000, ou mude o perfil da sua rede para "Particular".
 
-2. Configure a URL nos Blocos
-Nos blocos do seu App Inventor, onde você configura a URL dos componentes Web, substitua localhost pelo IP que você encontrou.
+🔧 Configuração (Variáveis de Ambiente)
+As variáveis de ambiente são gerenciadas no arquivo docker-compose.yml:
 
-Exemplo:
+POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB: Credenciais do banco de dados.
 
-URL ANTIGA: http://localhost:8000/alertas/
+DATABASE_URL: URL de conexão usada pela API para encontrar o banco de dados.
 
-URL CORRETA (exemplo): http://192.168.0.15:8000/alertas/
+API_URL: URL usada pelo simulador para encontrar a API.
 
-Firewall: Se o app não conseguir se conectar, o Firewall do seu computador pode estar bloqueando a porta 8000. Crie uma "Regra de Entrada" no Firewall do Windows para permitir conexões TCP na porta 8000 ou mude o perfil da sua rede para "Particular".
+📊 Dados Monitorados
+A plataforma foi projetada para rastrear:
 
-🛑 Como Parar a Aplicação
-Para parar a execução, volte ao terminal e pressione Ctrl + C.
+Localização e metadados de praias.
 
-Para parar e remover os contêineres, execute: docker compose down.
+Leituras de sensores (foco em enterococos e temperatura_agua).
+
+Histórico de alertas gerados, com nível de risco e mensagem.
+
+🤝 Contribuição
+Faça um Fork do projeto.
+
+Crie uma branch para sua feature (git checkout -b feature/NovaFeature).
+
+Faça o commit de suas mudanças (git commit -m 'Adiciona NovaFeature').
+
+Faça o push para a branch (git push origin feature/NovaFeature).
+
+Abra um Pull Request.
+
+📄 Licença
+Este projeto está sob a licença MIT.
+
+📞 Contato
+Para dúvidas ou sugestões, abra uma Issue no repositório.
+
+Qualidade da Água - Monitorando nossos mares para um futuro mais seguro. 🌊
