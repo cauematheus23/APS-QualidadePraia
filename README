@@ -1,0 +1,85 @@
+# Projeto: API de Monitoramento da Qualidade da Água
+
+[![Status](https://img.shields.io/badge/status-funcional-green)](https://shields.io/)
+[![Tecnologia](https://img.shields.io/badge/tecnologia-Docker-blue)](https://shields.io/)
+
+Solução de backend completa para monitorar a qualidade da água de praias, ideal para demonstrações e protótipos.
+
+A aplicação é totalmente conteinerizada com Docker, permitindo uma configuração e execução simplificada em qualquer ambiente. A arquitetura inclui uma API RESTful em Python/FastAPI, um banco de dados PostgreSQL e um simulador que gera dados de sensores automaticamente.
+
+## ✨ Funcionalidades
+
+* **API RESTful:** Endpoints para ingestão e consulta de dados.
+* **Simulador Autônomo:** Gera dados realistas de praias conhecidas (Copacabana, Gonzaga, etc.) e envia para a API.
+* **Processamento de Alertas:** Rotina automática que analisa os dados e gera alertas (Verde, Amarelo, Vermelho) com mensagens amigáveis.
+* **Documentação Interativa:** Interface Swagger UI (`/docs`) para explorar e testar a API.
+
+---
+
+## 🔧 Pré-requisitos
+
+Para executar o projeto, você precisa apenas de uma ferramenta instalada:
+
+* **Docker Desktop:** Garanta que esteja instalado e em execução.
+    * [Download para Windows, Mac e Linux](https://www.docker.com/products/docker-desktop/)
+
+---
+
+## 🚀 Como Rodar o Projeto
+
+Siga estes 3 passos para colocar todo o sistema no ar.
+
+### 1. Obtenha o Código
+
+Clone este repositório para a sua máquina local usando o seguinte comando em um terminal:
+
+```bash
+git clone <URL_DO_SEU_REPOSITORIO>
+2. Entre na Pasta do Projeto
+Navegue para o diretório que você acabou de clonar.
+
+Bash
+
+cd <NOME_DA_PASTA_DO_PROJETO>
+3. Inicie os Serviços
+Use o Docker Compose para construir as imagens e iniciar todos os contêineres. Este é o único comando que você precisa para rodar tudo:
+
+Bash
+
+docker compose up --build
+Aguarde a inicialização. O terminal exibirá os logs dos serviços. A primeira vez pode demorar alguns minutos.
+
+✅ Verificação e Teste
+Para confirmar que tudo está funcionando:
+
+Acesse a documentação da API no seu navegador: http://localhost:8000/docs
+
+Teste os endpoints. Execute o GET /praias/ para ver as praias criadas e o GET /alertas/ para ver os alertas gerados pelo simulador.
+
+📱 Integração com App Inventor
+Para que seu aplicativo no celular se conecte à API que está rodando no seu computador, siga estes passos:
+
+1. Encontre o IP do seu Computador
+Seu computador e seu celular precisam estar na mesma rede Wi-Fi. O app não entende localhost.
+
+No Windows: Abra o Prompt de Comando (CMD), digite ipconfig e procure pelo "Endereço IPv4" da sua conexão (Wi-Fi ou Ethernet).
+
+No macOS/Linux: Abra o terminal, digite ifconfig ou ip a e procure pelo seu endereço de IP (inet).
+
+O IP será algo como 192.168.0.15 ou 192.168.1.10.
+
+2. Configure a URL nos Blocos
+Nos blocos do seu App Inventor, onde você configura a URL dos componentes Web, substitua localhost pelo IP que você encontrou.
+
+Exemplo:
+
+URL ANTIGA: http://localhost:8000/alertas/
+
+URL CORRETA (exemplo): http://192.168.0.15:8000/alertas/
+
+Firewall: Se o app não conseguir se conectar, o Firewall do seu computador pode estar bloqueando a porta 8000. Crie uma "Regra de Entrada" no Firewall do Windows para permitir conexões TCP na porta 8000 ou mude o perfil da sua rede para "Particular".
+
+🛑 Como Parar a Aplicação
+Para parar a execução, volte ao terminal e pressione Ctrl + C.
+
+Para parar e remover os contêineres, execute: docker compose down.
